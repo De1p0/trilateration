@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Document</title>
+
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+          rel="stylesheet">
+     <style>
+          body {
+               font-family: "Comfortaa", sans-serif;
+          }
+
+          .container {
+               font-family: "Comfortaa", sans-serif;
+               display: flex;
+               align-content: center;
+               justify-content: center;
+               align-items: center;
+               height: 100vh;
+               flex-direction: column;
+          }
+
+          .coordcontainer {
+               margin-bottom: 10px;
+          }
+
+          .box {
+               font-family: "Comfortaa", sans-serif;
+               box-shadow: inset #abacaf 0 0 0 2px;
+               border: 0;
+               background: rgba(0, 0, 0, 0);
+               appearance: none;
+               position: relative;
+               border-radius: 3px;
+               padding: 9px 12px;
+               line-height: 1.4;
+               color: rgb(0, 0, 0);
+               transition: all .2s ease;
+               margin-bottom: 5px;
+          }
+
+          .box:hover {
+               box-shadow: 0 0 0 0 #fff inset, #1de9b6 0 0 0 2px;
+          }
+
+          .box:focus {
+               background: #fff;
+               outline: 0;
+               box-shadow: 0 0 0 0 #fff inset, #1de9b6 0 0 0 3px;
+          }
+
+          .submit {
+               font-family: "Comfortaa", sans-serif;
+               box-shadow: inset #abacaf 0 0 0 2px;
+               border: 0;
+               background: rgba(0, 0, 0, 0);
+               appearance: none;
+               position: relative;
+               border-radius: 3px;
+               padding: 9px 12px;
+               line-height: 1.4;
+               color: rgb(0, 0, 0);
+               transition: all .2s ease;
+          }
+
+          .submit:hover {
+               box-shadow: 0 0 0 0 #fff inset, #1de9b6 0 0 0 2px;
+          }
+
+          .submit:focus {
+               background: #fff;
+               outline: 0;
+               box-shadow: 0 0 0 0 #fff inset, #1de9b6 0 0 0 3px;
+          }
+     </style>
+</head>
+
+<body>
+     <div class="container">
+          <div class="coordcontainer">
+               <input class="coordinate box" placeholder="Coord 1 (Lat, Lon)"> </input>
+               <input class="box distance" placeholder="Distance 1 (miles)"> </input>
+          </div>
+          <div class="coordcontainer">
+               <input class="coordinate box" placeholder="Coord 2 (Lat, Lon)"> </input>
+               <input class="box distance" placeholder="Distance 2 (miles)"> </input>
+          </div>
+          <div class="coordcontainer">
+               <input disabled class="box output" placeholder="Output"> </input>
+          </div>
+          <button class="submit" onclick="submit()">Submit</button>
+     </div>
+     <script>
+          let $ = e => document.querySelectorAll(e)
+          async function submit() {
+               let location = window.location.href;
+               let data = await fetch(`${location}api/predict`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                         location1: $('.box')[0].value,
+                         distance1: $('.box')[1].value,
+                         location2: $('.box')[2].value,
+                         distance2: $('.box')[3].value,
+                    })
+               });
+
+               let response = await data.json();
+               $('.output')[0].value = `${response.lat} ${response.lon}`
+          }
+     </script>
+</body>
+
+</html>
